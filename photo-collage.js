@@ -24,8 +24,7 @@
         selector: ".photo-cell",
         horizontalMargin: 5,
         verticalMargin: 5,
-        rowHeights: [240, 360, 480],
-        style: "normal" // or "square"
+        rowHeights: [240, 360, 480]
     };
     
     function getRandomInt(min, max) {
