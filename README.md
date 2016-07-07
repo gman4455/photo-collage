@@ -23,5 +23,5 @@ All of the images **must** be loaded. I recommend using the imagesLoaded package
 	});
 
 ## Dependencies
-- jQuery
-- imagesLoaded (not required, but highly recommended. Images must be pre-loaded one way or another)
+- [jQuery](http://jquery.com/download)
+- [imagesLoaded](https://github.com/desandro/imagesloaded) (not required, but highly recommended. Images must be pre-loaded one way or another)
