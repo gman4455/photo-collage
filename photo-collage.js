@@ -18,8 +18,6 @@
 
 (function ($) {
     
-    "use strict";
-    
     var settings = {
         selector: ".photo-cell",
         horizontalMargin: 5,
