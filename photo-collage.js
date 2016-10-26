@@ -17,28 +17,21 @@
 */
 
 (function ($) {
-    
-    var settings = {
-        selector: ".photo-cell",
-        horizontalMargin: 5,
-        verticalMargin: 5,
-        rowHeights: [240, 360, 480]
-    };
-    
+
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     };
-    
+
     function getImageProps(img) {
         return {
             width: img.naturalWidth,
             height: img.naturalHeight
         };
     };
-    
+
     $.fn.photoLayout = function (options) {
-        $.extend(settings, options);
-        
+        var settings = $.extend({}, options, $.fn.photoLayout.defaults);
+
         var grid = [[]],
             $container = this,
             $photos = $container.find("img"),
@@ -46,26 +39,26 @@
             index = 0,
             xPos = 0,
             yPos = 0;
-        
+
         // set up container
         $container.css("position", "relative");
-        
+
         while (true) {
             // each iteration is one row.
             var tempWidth = 0,
                 targetWidth = $container.width() + settings.horizontalMargin,
                 row = [],
                 rowHeight = settings.rowHeights[getRandomInt(0, settings.rowHeights.length - 1)];
-            
+
             do {
                 // each iteration is one column.
                 if (tempIndex >= $photos.length)
                     break;
-                
+
                 var dimensions = getImageProps($photos[tempIndex]);
-                
+
                 var imageScaleRatio = rowHeight / dimensions.height;
-                
+
                 var imageProps = {
                     index: index,
                     width: Math.floor(dimensions.width * imageScaleRatio)
@@ -75,9 +68,9 @@
                 targetWidth -= settings.horizontalMargin;
                 tempIndex++;
             } while (tempWidth < targetWidth);
-            
+
             var scaleRatio = targetWidth / tempWidth;
-            if (scaleRatio > 1)
+            if (scaleRatio > settings.lastRowScaleThreshold || (row.length <= 1 && !settings.lastRowScaleSinglePhoto))
                 scaleRatio = 1;
             else
                 rowHeight = Math.floor(rowHeight * scaleRatio);
@@ -87,7 +80,7 @@
                     imageWidth = Math.floor(imageProps.width * scaleRatio);
 
                 var $img = $($container.find(settings.selector)[index]);
-                
+
                 $img.css({
                     position: "absolute",
                     left: xPos,
@@ -95,26 +88,35 @@
                     width: imageWidth + "px",
                     height: rowHeight + "px"
                 });
-                
+
                 $img.find("img").css({
                     width: "100%",
                     height: "100%"
                 });
-                
+
                 xPos += imageWidth + settings.horizontalMargin;
                 index++;
             }
-            
+
             xPos = 0;
-            
+
             if (row.length > 0)
                 yPos += rowHeight + settings.verticalMargin;
             else
                 break;
         }
-        
+
         yPos -= settings.verticalMargin;
         $container.css("height", yPos);
     };
-    
+
+    $.fn.photoLayout.defaults = {
+        selector: ".photo-cell",
+        horizontalMargin: 5,
+        verticalMargin: 5,
+        rowHeights: [240, 360, 480],
+        lastRowScaleThreshold: 1.5,
+        lastRowScaleSinglePhoto: false
+    };
+
 })(jQuery);
