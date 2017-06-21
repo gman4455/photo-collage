@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-(function ($) {
+;(function ($) {
 
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
@@ -106,8 +106,7 @@
                 break;
         }
 
-        yPos -= settings.verticalMargin;
-        $container.css("height", yPos);
+        $container.css("height", yPos - settings.verticalMargin);
     };
 
     $.fn.photoLayout.defaults = {
